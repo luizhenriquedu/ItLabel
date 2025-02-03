@@ -12,11 +12,20 @@ public class Program
     public async static Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand();
-        var initCommand = new Command("init", "Init local repository");
-        initCommand.SetHandler(async () => await InitCommand.Init());
-        
-        rootCommand.AddCommand(initCommand);
 
+        var addCommandOption = new Option<FileInfo>(
+            name: "--file",
+            description: "Adds file to the versioning tracking"
+            );
+        var initCommand = new Command("init", "Init local repository");
+        var addCommand = new Command("add", "Add file to tracking");
+        
+        addCommand.AddOption(addCommandOption);
+        
+        initCommand.SetHandler(async () => await InitCommand.Init());
+        addCommand.SetHandler(async (files) => await AddCommand.Add(files), addCommandOption);
+        rootCommand.AddCommand(initCommand);
+        rootCommand.AddCommand(addCommand);
         return await rootCommand.InvokeAsync(args);
     }
 }
