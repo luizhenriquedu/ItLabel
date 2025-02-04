@@ -23,7 +23,7 @@ public class Program
         addCommand.AddOption(addCommandOption);
         
         initCommand.SetHandler(async () => await InitCommand.Init());
-        addCommand.SetHandler(async (files) => await AddCommand.Add(files), addCommandOption);
+        addCommand.SetHandler(async (file) => await AddCommand.Add(file), addCommandOption);
         rootCommand.AddCommand(initCommand);
         rootCommand.AddCommand(addCommand);
         return await rootCommand.InvokeAsync(args);

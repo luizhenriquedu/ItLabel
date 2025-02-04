@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CSharpGit.Utils;
+namespace CSharpGit.Services;
 
-public class ShaHash
+public class ShaHashService
 {
     public static string GenerateHash(string buffer)
     {

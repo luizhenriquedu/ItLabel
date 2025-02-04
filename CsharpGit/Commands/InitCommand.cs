@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using CSharpGit.Exceptions;
+using CSharpGit.Services;
 
 namespace CSharpGit.Commands;
 ///<summary>
@@ -13,18 +14,9 @@ public class InitCommand
     /// <exception cref="RepositoryAlreadyInitiatedException"></exception>
     public static async ValueTask Init()
     {
-        if (Directory.Exists(".csgit")) 
+        if (CsGitService.GetCsGitDirectory(Environment.CurrentDirectory) != null)
             throw new RepositoryAlreadyInitiatedException("Repository already initiated");
-        Directory.CreateDirectory(".csgit");
-        Directory.CreateDirectory(".csgit/objects/info");
-        Directory.CreateDirectory(".csgit/objects/pack");
-        Directory.CreateDirectory(".csgit/refs/heads");
-        Directory.CreateDirectory(".csgit/refs/tags");
-
-       var file = File.Open(".csgit/HEAD", FileMode.Create);
-       file.Close();
-       await File.WriteAllTextAsync(".csgit/HEAD", "ref: refs/heads/main");
-       
-       Console.WriteLine($"Initiated empty CsGit repository in {Environment.CurrentDirectory}");
+        await CsGitService.Initialize();
+        Console.WriteLine($"Initiated empty CsGit repository in {Environment.CurrentDirectory}");
     }
 }
