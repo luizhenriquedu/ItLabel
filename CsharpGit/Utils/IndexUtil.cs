@@ -1,6 +1,6 @@
 namespace CSharpGit.Utils;
 
-public class IndexUtils
+public class IndexUtil
 {
     public static async Task<string[]> ReadIndexFile(string dir)
     {
