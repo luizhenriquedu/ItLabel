@@ -4,7 +4,7 @@ namespace CSharpGit.Services;
 
 public class BlobCompressorService
 {
-    public static async Task<byte[]> CompressToBlob(string filePath)
+    public static async Task<byte[]> CompressFileToBlob(string filePath)
     {
         var fileBytes = await File.ReadAllBytesAsync(filePath);
         var memoryStream = new MemoryStream();

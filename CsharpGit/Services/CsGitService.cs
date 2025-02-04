@@ -32,7 +32,10 @@ public class CsGitService
         while (currentDirectory.Parent != null)
         {
             if (Directory.Exists(Path.Combine(currentDirectory.FullName, ".csgit")))
+            {
                 return Path.Combine(currentDirectory.FullName, ".csgit");
+            }
+                
             currentDirectory = currentDirectory.Parent;
         }
 
