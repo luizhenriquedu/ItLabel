@@ -7,10 +7,9 @@ public class ShaHashService
 {
     public static string GenerateHash(string buffer)
     {
-        var sha = SHA256.Create();
 
-        byte[] bytes = Encoding.UTF8.GetBytes(buffer);
-        byte[] hashBytes = sha.ComputeHash(bytes);
+        var bytes = Encoding.UTF8.GetBytes(buffer);
+        var hashBytes = SHA256.HashData(bytes);
 
         StringBuilder sb = new();
         

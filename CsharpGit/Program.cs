@@ -2,14 +2,17 @@
 using CSharpGit.Commands;
 
 namespace CSharpGit;
-/*
- * <summary>
- *      Program class
- * </summary>
- */
+/// <summary>
+///     Program class
+/// </summary>
 public class Program
 {
-    public async static Task<int> Main(string[] args)
+    /// <summary>
+    ///     Start program method
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns>Returns a Task int</returns>
+    public static async Task<int> Main(string[] args)
     {
         var rootCommand = new RootCommand();
 
@@ -24,16 +27,25 @@ public class Program
         var initCommand = new Command("init", "Init local repository");
         var addCommand = new Command("add", "Add file to tracking");
         var commitCommand = new Command("commit", "Commits an alteration");
+        var resetHead = new Command("reset", "resets branch to a commit");
+        var resetToHead = new Command("HEAD", "resets to the head commit");
         
+        
+        resetHead.AddCommand(resetToHead);
+            
         addCommand.AddOption(addCommandOption);
         commitCommand.AddOption(commitCommandOption);
         
         initCommand.SetHandler(async () => await InitCommand.Init());
         addCommand.SetHandler(async (file) => await AddCommand.Add(file), addCommandOption);
         commitCommand.SetHandler(async (message) => await CommitCommand.Commit(message), commitCommandOption);
+        resetToHead.SetHandler(async () => await ResetCommand.ResetToHead());
+        
+        
         rootCommand.AddCommand(initCommand);
         rootCommand.AddCommand(addCommand);
         rootCommand.AddCommand(commitCommand);
+        rootCommand.AddCommand(resetHead);
         return await rootCommand.InvokeAsync(args);
     }
 }

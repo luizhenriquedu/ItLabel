@@ -12,8 +12,10 @@ public class CsGitService
         Directory.CreateDirectory(".csgit/refs/heads");
         Directory.CreateDirectory(".csgit/refs/tags");
         Environment.SetEnvironmentVariable("PROJECT_CSGIT_DIR",csgitDir.FullName);
-        var file = File.Open(".csgit/HEAD", FileMode.Create);
-        file.Close();
+        var head = File.Open(".csgit/HEAD", FileMode.Create);
+        head.Close();
+        var main = File.Open(".csgit/refs/heads/main", FileMode.Create);
+        main.Close();
         await File.WriteAllTextAsync(".csgit/HEAD", "ref: refs/heads/main");
     }
 
@@ -32,9 +34,7 @@ public class CsGitService
         while (currentDirectory.Parent != null)
         {
             if (Directory.Exists(Path.Combine(currentDirectory.FullName, ".csgit")))
-            {
                 return Path.Combine(currentDirectory.FullName, ".csgit");
-            }
                 
             currentDirectory = currentDirectory.Parent;
         }

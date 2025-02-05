@@ -46,7 +46,7 @@ public class TreeService
     public static async Task<Dictionary<string,object>> IndexTree()
     {
         var directory = CsGitService.GetCsGitDirectory(Environment.CurrentDirectory);
-        var lines = await IndexUtils.ReadIndexFile(directory!);
+        var lines = await IndexUtil.ReadIndexFile(directory!);
         
         if (lines.Length == 0)
             throw new NothingToCommitException("Nothing to commit");
