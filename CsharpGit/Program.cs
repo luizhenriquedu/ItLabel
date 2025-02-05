@@ -14,6 +14,7 @@ public class Program
     /// <returns>Returns a Task int</returns>
     public static async Task<int> Main(string[] args)
     {
+
         var rootCommand = new RootCommand();
 
         var addCommandOption = new Option<FileInfo>(

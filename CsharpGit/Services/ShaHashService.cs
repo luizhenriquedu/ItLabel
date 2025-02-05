@@ -11,13 +11,11 @@ public static class ShaHashService
     /// <summary>
     ///     Generate a hash 
     /// </summary>
-    /// <param name="buffer">String to be hashed</param>
+    /// <param name="data">Bytes to be hashed</param>
     /// <returns>Returns a hash string that represents the buffer</returns>
-    public static string GenerateHash(string buffer)
+    public static string GenerateHash(byte[] data)
     {
-
-        var bytes = Encoding.UTF8.GetBytes(buffer);
-        var hashBytes = SHA256.HashData(bytes);
+        var hashBytes = SHA1.HashData(data);
 
         StringBuilder sb = new();
         

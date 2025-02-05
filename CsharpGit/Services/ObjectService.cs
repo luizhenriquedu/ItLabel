@@ -1,3 +1,4 @@
+using System.Text;
 using CSharpGit.Exceptions;
 
 namespace CSharpGit.Services;
@@ -39,7 +40,7 @@ public static class ObjectService
         await File.WriteAllBytesAsync(Path.Combine(dir, hashPathContinue), compressedBlobContent);
     }
 
-    public static async ValueTask WriteAppendToObject(string hash, string appendString)
+    public static async ValueTask WriteAppendToObject(string hash, byte[] appendBytes)
     {
         var directory = CsGitService.GetCsGitDirectory(Environment.CurrentDirectory);
         
@@ -50,6 +51,7 @@ public static class ObjectService
         var hashPathContinue = hash.Substring(2, hash.Length - 2); 
         
         var dir = CsGitService.CreateObjectHashDirectory(hash2CharPath);
-        await File.AppendAllTextAsync(Path.Combine(dir, hashPathContinue), appendString);
+        var bytesToString = Encoding.UTF8.GetString(appendBytes);
+        await File.AppendAllTextAsync(Path.Combine(dir, hashPathContinue), bytesToString);
     }
 }

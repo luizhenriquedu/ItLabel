@@ -29,22 +29,23 @@ public static class TreeService
     /// <returns>The tree hash</returns>
     public static async Task<string> WriteTree(string name, Dictionary<string,object> tree)
     {
-        string hash = ShaHashService.GenerateHash(DateTimeOffset.Now.ToString()+name);;
+        string hash = ShaHashService.GenerateHash(Encoding.ASCII.GetBytes(DateTimeOffset.Now.ToString()+name));;
         foreach (var element in tree)
         {
             if (element.Value is Dictionary<string, object> subdir)
             {
-                
                 var dirSha = await WriteTree(element.Key, subdir);
                 var buffer = $"tree {dirSha} {element.Key}\n";
-                Console.WriteLine($"------------------------\t\n|\n|\n|\t\t{buffer}\n|\n|\n|\n_______________");
-                await ObjectService.WriteAppendToObject(hash, buffer);
-                
+                var bufferByte = Encoding.UTF8.GetBytes(buffer);
+                var compressedBuffer = CsGitBlobService.CreateCsGitBlob(bufferByte);
+                await ObjectService.WriteObject(hash, compressedBuffer);
             }
             else
             {
-                var bytes = Encoding.UTF8.GetBytes($"blob {element.Value} {element.Key}\n");
-                await ObjectService.WriteObject(hash, bytes);
+                var buffer = $"blob {element.Value} {element.Key}\n";
+                var bufferByte = Encoding.UTF8.GetBytes(buffer);
+                var compressedBuffer = CsGitBlobService.CreateCsGitBlob(bufferByte);
+                await ObjectService.WriteObject(hash, compressedBuffer);
             }
         }
 
@@ -67,6 +68,7 @@ public static class TreeService
                 Console.WriteLine($"{indent}{key}/");
                 PrintTree(subTree, indent + "  ");
             }
+            
         }
     }
     /// <summary>
