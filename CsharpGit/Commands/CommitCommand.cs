@@ -5,7 +5,7 @@ using CSharpGit.Utils;
 
 namespace CSharpGit.Commands;
 
-public class CommitCommand
+public static class CommitCommand
 {
 
     private static string BuildCommit(string message, string tree, string lastCommit)
@@ -26,9 +26,12 @@ public class CommitCommand
     {
         if (message is null)
             throw new NoMessageToCommitException("No message provided");
-        
-        var tree = await TreeService.IndexTree();
-        var treeHash = await TreeService.BuildTree("root", tree);
+        var lines = await IndexUtil.ReadIndexFile();
+        if (lines.Length == 0)
+            throw new NothingToCommitException("Nothing to commit");
+        var tree =  TreeService.IndexTree(lines);
+        TreeService.PrintTree(tree, "");
+        var treeHash = await TreeService.WriteTree("root", tree);
         var currentCommit = await ReferenceUtil.ReadReference();
         var hash = BuildCommit(message, treeHash, currentCommit);
         await ReferenceUtil.UpdateReference(hash);

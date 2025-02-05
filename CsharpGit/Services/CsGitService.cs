@@ -1,9 +1,14 @@
 using CSharpGit.Exceptions;
 
 namespace CSharpGit.Services;
-
-public class CsGitService
+/// <summary>
+/// CsGit Repository Manage Class
+/// </summary>
+public static class CsGitService
 {
+    /// <summary>
+    /// Initialize Cs Git repository
+    /// </summary>
     public static async ValueTask Initialize()
     {
         var csgitDir = Directory.CreateDirectory(".csgit");
@@ -19,14 +24,36 @@ public class CsGitService
         await File.WriteAllTextAsync(".csgit/HEAD", "ref: refs/heads/main");
     }
 
-    public static string CreateObjectHashDirectory(string shortHash)
+    /// <summary>
+    /// Create object directory
+    /// </summary>
+    /// <example>
+    ///     <code>
+    ///         CreateObjectHashDirectory("directory name");
+    ///           <br/>
+    ///          .csgit<br/>    
+    ///              L objects<br/>
+    ///                  L directory_name
+    ///     </code>
+    ///      
+    /// </example>
+    /// <param name="name">The directory name</param>
+    /// <returns></returns>
+    /// <exception cref="RepositoryNotFoundException">Not found repository exception</exception>
+    public static string CreateObjectHashDirectory(string name)
     {
         var directory = GetCsGitDirectory(Environment.CurrentDirectory);
         if (directory is null)
             throw new RepositoryNotFoundException("Repository not found");
-        var dir = Directory.CreateDirectory(Path.Combine(directory, "objects", shortHash));
+        var dir = Directory.CreateDirectory(Path.Combine(directory, "objects", name));
         return dir.FullName;
     }
+    /// <summary>
+    /// Get .csgit directory
+    /// </summary>
+    /// <param name="startPath">The path do start the search recursively</param>
+    /// <returns>Return the .csgit directory path</returns>
+
     public static string? GetCsGitDirectory(string startPath)
     {
         var currentDirectory = new DirectoryInfo(startPath);

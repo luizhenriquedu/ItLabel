@@ -6,7 +6,7 @@ namespace CSharpGit.Commands;
 ///<summary>
 ///  Init CLI Command
 ///</summary>
-public class InitCommand
+public static class InitCommand
 {
     /// <summary>
     ///     Init method

@@ -3,8 +3,16 @@ using System.Text;
 
 namespace CSharpGit.Services;
 
-public class ShaHashService
+/// <summary>
+///     SHA Hashing Service class
+/// </summary>
+public static class ShaHashService
 {
+    /// <summary>
+    ///     Generate a hash 
+    /// </summary>
+    /// <param name="buffer">String to be hashed</param>
+    /// <returns>Returns a hash string that represents the buffer</returns>
     public static string GenerateHash(string buffer)
     {
 
@@ -14,9 +22,8 @@ public class ShaHashService
         StringBuilder sb = new();
         
         foreach(var b in hashBytes)
-        {
             sb.Append(b.ToString("x2"));
-        }
+        
 
         return sb.ToString();
     }

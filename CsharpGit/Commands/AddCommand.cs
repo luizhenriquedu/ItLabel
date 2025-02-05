@@ -3,7 +3,7 @@ using CSharpGit.Services;
 
 namespace CSharpGit.Commands;
 
-public class AddCommand
+public static class AddCommand
 {
     public static async ValueTask Add(FileInfo path)
     {
@@ -14,12 +14,11 @@ public class AddCommand
         var parentDirectory = new DirectoryInfo(directory).Parent;
         var content = await File.ReadAllTextAsync(path.FullName);
         var hash = ShaHashService.GenerateHash(content);
-        
         var compressedBlobContent = await BlobCompressorService.CompressFileToBlob(path.FullName);
-
+        var rootRelative = Path.GetRelativePath(parentDirectory!.FullName, Environment.CurrentDirectory);
         await ObjectService.WriteObject(hash, compressedBlobContent);
         
-        var buffer = $"{hash} {Path.GetRelativePath(parentDirectory.FullName, path.FullName)}\n";
+        var buffer = $"{hash} {Path.GetRelativePath(parentDirectory!.FullName, path.FullName)}\n";
         await File.AppendAllTextAsync(Path.Combine(directory, "index"), buffer);
     }
 }
